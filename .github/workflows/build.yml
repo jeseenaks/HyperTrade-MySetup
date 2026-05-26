@@ -33,4 +33,4 @@ jobs:
         run: scripts/prepare.sh production
 
       - name: Build
-        run: make build
+        run: make build REGISTRY=ghcr.io/${{ github.actor }}/hypertrade
