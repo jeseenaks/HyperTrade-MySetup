@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: ./services/web
+      dockerfile: Dockerfile
+    container_name: hypertrade-web
+    ports:
+      - "8080:80"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    networks:
+      - hypertrade-network
+
+  exchange:
+    build:
+      context: ./services/exchange
+      dockerfile: Dockerfile
+    container_name: hypertrade-exchange
+    ports:
+      - "8081:80"
+    environment:
+      - GOOS=linux
+      - CGO_ENABLED=0
+    restart: unless-stopped
+    networks:
+      - hypertrade-network
+
+  strategy:
+    build:
+      context: ./services/strategy
+      dockerfile: Dockerfile
+    container_name: hypertrade-strategy
+    ports:
+      - "8084:80"
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    networks:
+      - hypertrade-network
+
+networks:
+  hypertrade-network:
+    driver: bridge
